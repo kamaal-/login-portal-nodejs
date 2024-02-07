@@ -1,0 +1,30 @@
+version: '3.8'
+
+services:
+
+  api:
+    build:
+      dockerfile: Dockerfile
+      context: "../api"
+    container_name: api
+    ports:
+      - "4000:4000"
+    environment:
+      - DB=mongodb+srv://kml5ive:RcYbm6hEuJTM2VQZ@cluster0.avocu9e.mongodb.net/?retryWrites=true&w=majority
+      - PORT=4000
+
+  app:
+    build:
+      dockerfile: Dockerfile
+      context: "../app"
+    container_name: app
+    depends_on:
+      - api
+    ports:
+      - "3000:3000"
+    links:
+      - api
+    environment:
+      - API=http://localhost:4000/
+      - PORT=3000
+
